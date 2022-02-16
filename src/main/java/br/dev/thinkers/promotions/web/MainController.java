@@ -1,4 +1,4 @@
-package br.dev.thinkers.promotions.web.controller;
+package br.dev.thinkers.promotions.web;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
