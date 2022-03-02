@@ -52,7 +52,7 @@
                     <label for="categoria">Categoria do Produto</label>
                     <select id="categoria" name="categoria" class="form-control">
                         <option value="">Selecione</option>
-                        <option th:each="c : ${categorias}" th:text="${c.titulo}" th:value="${c.id}">...</option>
+                        <option th:each="c : ${categories}" th:text="${c.title}" th:value="${c.id}">...</option>
                     </select>
                     <div id="error-categoria"></div>
                 </div>

@@ -1,0 +1,1 @@
+ALTER TABLE promotions RENAME COLUMN descritpion TO description;

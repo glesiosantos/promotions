@@ -10,6 +10,6 @@ public class MainController {
 
     @GetMapping("/")
     public String home() {
-        return "promo-add";
+        return "redirect:/promotions/form";
     }
 }

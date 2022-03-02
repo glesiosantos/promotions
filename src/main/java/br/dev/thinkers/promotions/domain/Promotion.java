@@ -27,6 +27,7 @@ public class Promotion extends DateAudit {
     @Column(name = "image_link")
     private String imageLink;
 
+
     @NumberFormat(pattern = "#,##0.00", style = NumberFormat.Style.CURRENCY)
     private BigDecimal price;
 
