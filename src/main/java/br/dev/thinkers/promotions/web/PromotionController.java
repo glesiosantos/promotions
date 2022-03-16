@@ -9,12 +9,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Controller
@@ -36,7 +40,14 @@ public class PromotionController {
     }
 
     @PostMapping("/save")
-    public ResponseEntity<Promotion> savePromotions(Promotion promotion){
+    public ResponseEntity<?> savePromotions(@Valid Promotion promotion, BindingResult result){
+        log.info("********************************** "+promotion.getTitle());
+      if(result.hasErrors()) {
+          Map<String, String> errors = new HashMap<>();
+          result.getFieldErrors().forEach(field -> errors.put(field.getField(), field.getDefaultMessage()));
+          return ResponseEntity.unprocessableEntity().body(errors);
+      }
+
       promotionRepository.save(promotion);
       return ResponseEntity.ok().build();
     }

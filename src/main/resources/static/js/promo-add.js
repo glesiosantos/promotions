@@ -3,9 +3,9 @@ $('#form-add-promo').submit(function(event){
     let promotions = {}
     promotions.linkPromotion = $('#linkPromocao').val()
     promotions.description =  $('#descricao').val()
-    promotions.title = $('#titulo').val()
-    promotions.category = $('#categoria').val()
-    promotions.price= $('#preco').val()
+    promotions.title = $('#title').val()
+    promotions.category = $('#category').val()
+    promotions.price= $('#price').val()
     promotions.imageLink = $('#linkImagem').attr('src')
     promotions.sitePromotion = $('#site').text()
     console.log('promotions ', promotions)
@@ -14,6 +14,19 @@ $('#form-add-promo').submit(function(event){
         method: 'POST',
         url: '/promotions/save',
         data: promotions,
+        beforeSend: function(){
+            // removendo as messages
+            $('span').closest('.error-span').remove()
+
+            // removendo as bordas vermelhas
+            $('#category').removeClass('is-invalid')
+            $('#price').removeClass('is-invalid')
+            $('#title').removeClass('is-invalid')
+
+            //habilando o loading
+//            $('#form-add-promo').hide();
+//            $('#loader-form').addClass('loader').show()
+        },
         success: function() {
             $('#form-add-promo').each(function(){
                 this.reset();
@@ -22,6 +35,18 @@ $('#form-add-promo').submit(function(event){
             $('#site').text('')
 
             $('#alert').addClass('alert alert-success').text('Ok! Promoção cadastrada com sucesso')
+        },
+        statusCode: {
+            422: function(xhr) {
+                console.log('status error.: ', xhr.status)
+                const errors = $.parseJSON(xhr.responseText)
+                $.each(errors, function(key, value){
+                    console.log('***********************', key)
+                    $('#'+key).addClass('is-invalid')
+                    $('#error-'+key).addClass('invalid-feedback')
+                            .append('<span class="error-span">'+ value +'</span>')
+                })
+            }
         },
         error: function(xhr){
             console.log('> error: ', xhr.responseText)
@@ -41,14 +66,14 @@ $('#linkPromocao').on('change', function(){
             cache: false,
             beforeSend: function(){
                 $('#alert').removeClass('alert alert-danger alert-success').text('')
-                $('#titulo').val('')
+                $('#title').val('')
                 $('#site').text('')
                 $('#loader-img').addClass('loader')
 //                $('#linkImagem').remove()
             },
             success: function(data) {
 //                console.log(data)
-                $('#titulo').val(data.title)
+                $('#title').val(data.title)
                 $('#site').text(data.site.replace('@',''))
                 $('#linkImagem').attr("src", data.image)
                 $('#loader-img').removeClass('loader')
